@@ -1,15 +1,18 @@
 <?php
 
-function generate_dropdown($title, $values){
+function generate_dropdown($title, $values, $name){
     $num = count($values);
+    for ($i = 0; $i < $num; $i++){
+        $values[$i] = $values[$i]["surname"];
+    }
     $options = '';
     for ($i = 0; $i < $num; $i++){
-        $options .= "<option value=\"$i+1\">$values[$i]</option>";
+        $options .= "<option value=\"".$values[$i]."\">$values[$i]</option>";
     }
     return "
         <div class=\"mb-3\">
             <label for=\"$title\" class=\"form-label\">$title</label>
-            <select class=\"form-select\" id=\"$title\">
+            <select class=\"form-select\" id=\"$title\" name='$name'>
                 <option selected>Выберите значение</option>
                 $options
             </select>

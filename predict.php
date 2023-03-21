@@ -1,14 +1,18 @@
 <?php
 include('components/header.php');
+include('components/dropdown.php');
+include('components/checkbox.php');
+include('components/book_as_card.php');
 include('utils.php');
+include('database/database.php');
 session_start();
-setPage("predict");
+set_page("predict");
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Главная страница</title>
+    <title>Рекомендации для прочтения</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -17,22 +21,58 @@ setPage("predict");
 </head>
 <body>
 <?php
+if (!isset($_SESSION["user"])){
+    echo get_need_auth_block();
+    exit();
+}
+?>
+<?php
 echo generate_header();
 ?>
 <div class="card bg-dark text-white pt-5 pb-5 min-vh-100" style="padding: 0 200px 0 200px;">
     <div class="card-body mt-5">
         <h5 class="card-title">Рекомендации</h5>
-        <form>
-            <div class="mb-3">
-                <label for="genre" class="form-label">Предпочитаемый жанр</label>
-                <input type="text" class="form-control" id="genre">
-            </div>
-            <div class="mb-3">
-                <label for="author" class="form-label">Предпочитаемый автор</label>
-                <input type="text" class="form-control" id="author">
-            </div>
+        <h6>*Все поля обязательны для заполнения</h6>
+        <form class="mb-5" action="" method="GET">
+            <?php
+            $authors = get_all_authors();
+            $genres = get_all_genres();
+            $_SESSION["genres"] = $genres;
+            echo generate_dropdown("Авторы", $authors, 'authors[]');
+            echo generate_checkbox($genres, 'genres[]');
+            ?>
             <button type="submit" class="btn btn-primary">Получить рекомендацию</button>
         </form>
+        <div class="row row-cols-1 row-cols-md-3 g-4 text-black">
+            <?php
+            $books = null;
+            if (isset($_GET["authors"]) && isset($_GET["genres"])){
+                $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], $_GET["genres"]);
+            } else {
+                $books = get_books();
+            }
+            $num = count($books);
+            shuffle($books);
+            if ($num>5){
+                $num = 5;
+            }
+            $res = '';
+            for ($i = 0; $i < $num; $i++){
+                $authors = get_authors_by_book_id($books[$i]['id']);
+                $num2 = count($authors);
+                $authors_res = 'Авторы: ';
+                for ($j = 0; $j < $num2; $j++) {
+                    if ($j == $num2 -1){
+                        $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"];
+                    } else{
+                        $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"].', ';
+                    }
+                }
+                $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['id']);
+            }
+            echo $res;
+            ?>
+        </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
