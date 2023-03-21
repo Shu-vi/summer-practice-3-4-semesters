@@ -5,6 +5,7 @@ include('components/checkbox.php');
 include('components/book_as_card.php');
 include('utils.php');
 include('database/database.php');
+include('components/need_auth.php');
 session_start();
 set_page("predict");
 ?>

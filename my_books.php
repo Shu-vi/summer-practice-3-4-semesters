@@ -4,6 +4,7 @@ include('components/pagination.php');
 include('components/book_in_list.php');
 include('utils.php');
 include('database/database.php');
+include('components/need_auth.php');
 session_start();
 set_page("my_books");
 ?>
