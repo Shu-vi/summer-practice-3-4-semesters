@@ -35,18 +35,28 @@ echo generate_header();
         <!--FILTERS START-->
         <div class="col-md-3">
             <h3>Фильтры</h3>
-            <form action="index.php" method="GET">
-                <?php
-                $authors = get_all_authors();
-                $genres = get_all_genres();
-                $_SESSION["genres"] = $genres;
-                echo generate_dropdown("Авторы", $authors, 'authors[]');
-                echo generate_checkbox($genres, 'genres[]');
-                ?>
+            <form action="" method="GET">
+                <div class="form-group">
+                    <label for="author_name">Имя автора</label>
+                    <input type="text" class="form-control" id="author_name" name="author_name" placeholder="Введите имя автора">
+                </div>
+                <div class="form-group">
+                    <label for="author_surname">Фамилия автора</label>
+                    <input type="text" class="form-control" id="author_surname" name="author_surname" placeholder="Введите фамилию автора">
+                </div>
+                <div class="form-group">
+                    <label for="title">Поиск по названию</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Введите название книги">
+                </div>
+                <div class="form-group">
+                    <label for="genre">Поиск по жанру</label>
+                    <input type="text" class="form-control" id="genre" name="genre" placeholder="Введите жанр">
+                </div>
                 <button type="submit" class="btn btn-primary">Применить фильтры</button>
             </form>
         </div>
         <!--FILTERS FINISH-->
+
         <!--BOOKS START-->
         <div class="col-md-9">
             Примененные фильтры: <?php
