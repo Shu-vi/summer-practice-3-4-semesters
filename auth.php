@@ -36,7 +36,7 @@ echo generate_header();
         <form method="post" action="">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="auth_email">
+                <input type="text" class="form-control" id="email" name="auth_email">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Пароль</label>

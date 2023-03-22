@@ -2,12 +2,18 @@
 
 function generate_dropdown($title, $values, $name){
     $num = count($values);
-    for ($i = 0; $i < $num; $i++){
-        $values[$i] = $values[$i]["surname"];
-    }
+//    for ($i = 0; $i < $num; $i++){
+//        $values[$i] = $values[$i]["surname"];
+//    }
     $options = '';
     for ($i = 0; $i < $num; $i++){
-        $options .= "<option value=\"".$values[$i]."\">$values[$i]</option>";
+        $options .= "<option value=\""
+            .$values[$i]['id']
+            ."\">"
+            .$values[$i]['surname']
+            .' '
+            .$values[$i]['name']."</option>";
+
     }
     return "
         <div class=\"mb-3\">

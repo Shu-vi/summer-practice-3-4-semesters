@@ -22,7 +22,7 @@ set_page("predict");
 </head>
 <body>
 <?php
-if (!isset($_SESSION["user"])){
+if (!isset($_SESSION["user"])) {
     echo get_need_auth_block();
     exit();
 }
@@ -33,14 +33,16 @@ echo generate_header();
 <div class="card bg-dark text-white pt-5 pb-5 min-vh-100" style="padding: 0 200px 0 200px;">
     <div class="card-body mt-5">
         <h5 class="card-title">Рекомендации</h5>
-        <h6>*Здесь вы можете получить подборку из 5 случайных книг, которых нет у вас на руках и в избранном. В целом, число книг может быть
-        и меньше 5, если нашлось слишком малое количество книг, удовлетворяющих результатам вашего поиска</h6>
+        <h6>*Здесь вы можете получить подборку из 5 случайных книг, которых нет у вас на руках и в избранном. В целом,
+            число книг может быть
+            и меньше 5, если нашлось слишком малое количество книг, удовлетворяющих результатам вашего поиска</h6>
         <form class="mb-5" action="" method="GET">
             <?php
             $authors = get_all_authors();
             $genres = get_all_genres();
             $_SESSION["genres"] = $genres;
             echo generate_dropdown("Авторы", $authors, 'authors[]');
+            //print_r($_GET['authors']); //здесь хранится айдишник выбранного автора
             echo "<div class='text-white'>Жанры</div>";
             echo generate_checkbox($genres, 'genres[]');
             ?>
@@ -49,31 +51,38 @@ echo generate_header();
         <div class="row row-cols-1 row-cols-md-3 g-4 text-black">
             <?php
             $books = null;
-            if (isset($_GET["authors"]) && isset($_GET["genres"])){
+            if (isset($_GET["genres"])) {
                 $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], $_GET["genres"]);
+            } elseif (isset($_GET["authors"])) {
+                $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], []);
             } else {
-                $books = get_books_by_filters();
+                $books = get_unique_books($_SESSION['user']['id'], [], []);
             }
             $num = count($books);
             shuffle($books);
-            if ($num>5){
+            if ($num > 5) {
                 $num = 5;
             }
             $res = '';
-            for ($i = 0; $i < $num; $i++){
+            for ($i = 0; $i < $num; $i++) {
                 $authors = get_authors_by_book_id($books[$i]['id']);
                 $num2 = count($authors);
                 $authors_res = 'Авторы: ';
                 for ($j = 0; $j < $num2; $j++) {
-                    if ($j == $num2 -1){
-                        $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"];
-                    } else{
-                        $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"].', ';
+                    if ($j == $num2 - 1) {
+                        $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"];
+                    } else {
+                        $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"] . ', ';
                     }
                 }
                 $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['id']);
             }
-            echo $res;
+            if (!empty($res)) {
+                echo $res;
+            } else {
+                echo "<div class='text-white'>По вашему запросу ничего не найдено. Попробуйте выбрать другие критерии для поиска или вовсе не выбирать их.</div>";
+            }
+
             ?>
         </div>
     </div>
