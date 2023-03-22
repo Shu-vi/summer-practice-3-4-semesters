@@ -5,6 +5,9 @@ include('utils.php');
 include('database/database.php');
 session_start();
 set_page("auth");
+if (isset($_SESSION['auth_incorrect_data'])){
+    unset($_SESSION['auth_incorrect_data']);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +21,7 @@ set_page("auth");
 </head>
 <body>
 <?php
-if (isset($_SESSION["user"])){
+if (isset($_SESSION["user"])) {
     echo generate_go_to_home();
     exit();
 }
@@ -30,7 +33,7 @@ echo generate_header();
 <div class="card bg-dark text-white pt-5 pb-5 min-vh-100" style="padding: 0 200px 0 200px;">
     <div class="card-body mt-5">
         <h5 class="card-title">Вход</h5>
-        <form method="post" action="auth.php">
+        <form method="post" action="">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="auth_email">
@@ -43,16 +46,29 @@ echo generate_header();
                 <button type="submit" class="btn btn-primary">Войти</button>
                 <div>Нет аккаунта? <a href="./registr.php">Зарегистрируйтесь!</a></div>
                 <?php
-                if (isset($_POST["auth_email"]) && isset($_POST["auth_password"])){
-                    $user = get_user_by_login($_POST["auth_email"]);
-                    if (isset($user)){
-                        if ($user != null){
-                            if ($_POST["auth_password"] == $user["password"]){
+                if (isset($_POST["auth_email"]) && isset($_POST["auth_password"])) {
+                    if (!empty($_POST['auth_email']) && !empty($_POST["auth_password"])) {
+                        $user = get_user_by_login($_POST["auth_email"]);
+                        if (!empty($user)) {
+                            if ($_POST["auth_password"] == $user["password"]) {
                                 $_SESSION["user"] = $user;
-                                header('Location: '.'/library/index.php');
+                                header('Location: ' . '/library/index.php');
+                            } else {
+                                $_SESSION['auth_incorrect_data'] = true;
                             }
+                        } else {
+                            $_SESSION['auth_incorrect_data'] = true;
                         }
+                    } else {
+                        $_SESSION['auth_incorrect_data'] = true;
                     }
+                }
+                ?>
+            </div>
+            <div class="text-white">
+                <?php
+                if (isset($_SESSION['auth_incorrect_data'])) {
+                    echo "Неправильный логин или пароль";
                 }
                 ?>
             </div>

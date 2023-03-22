@@ -12,7 +12,7 @@ function generate_pagination($total_elements, $current_page = 1, $elements_on_on
         $next = "disabled";
     }
     return "
-                <nav aria-label=\"...\">
+                <nav aria-label=\"...\" class='mt-5'>
                     <ul class=\"pagination mt-3\">
                         <li class=\"page-item $prev\">
                             <a class=\"page-link\" href= \"/library/index.php/?page=".($current_page-1)."\" tabindex=\"-1\" aria-disabled=\"true\">Предыдущая</a>

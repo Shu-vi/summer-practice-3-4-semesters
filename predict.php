@@ -33,13 +33,15 @@ echo generate_header();
 <div class="card bg-dark text-white pt-5 pb-5 min-vh-100" style="padding: 0 200px 0 200px;">
     <div class="card-body mt-5">
         <h5 class="card-title">Рекомендации</h5>
-        <h6>*Все поля обязательны для заполнения</h6>
+        <h6>*Здесь вы можете получить подборку из 5 случайных книг, которых нет у вас на руках и в избранном. В целом, число книг может быть
+        и меньше 5, если нашлось слишком малое количество книг, удовлетворяющих результатам вашего поиска</h6>
         <form class="mb-5" action="" method="GET">
             <?php
             $authors = get_all_authors();
             $genres = get_all_genres();
             $_SESSION["genres"] = $genres;
             echo generate_dropdown("Авторы", $authors, 'authors[]');
+            echo "<div class='text-white'>Жанры</div>";
             echo generate_checkbox($genres, 'genres[]');
             ?>
             <button type="submit" class="btn btn-primary">Получить рекомендацию</button>
@@ -50,7 +52,7 @@ echo generate_header();
             if (isset($_GET["authors"]) && isset($_GET["genres"])){
                 $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], $_GET["genres"]);
             } else {
-                $books = get_books();
+                $books = get_books_by_filters();
             }
             $num = count($books);
             shuffle($books);

@@ -1,16 +1,5 @@
 <?php
 include('connect.php');
-function get_books()
-{
-    $con = get_connection();
-    $arr = array();
-    $select_query = "SELECT * FROM books";
-    $result_query = mysqli_query($con, $select_query);
-    while ($row = mysqli_fetch_assoc($result_query)) {
-        $arr[] = $row;
-    }
-    return $arr;
-}
 
 function get_authors_by_book_id($book_id)
 {
@@ -147,7 +136,12 @@ function get_user_by_login($login)
     while ($row = mysqli_fetch_assoc($result_query)) {
         $arr[] = $row;
     }
-    return $arr[0];
+    if (!empty($arr)){
+        return $arr[0];
+    }else{
+        return $arr;
+    }
+
 }
 
 function get_favourites_books_by_user_id($user_id)
@@ -235,11 +229,46 @@ function get_favourites_books_by_user_id_and_book_id($user_id, $book_id)
     return $arr;
 }
 
-function add_to_favourites($book_id, $user_id){
+function add_to_favourites($book_id, $user_id)
+{
     $con = get_connection();
     $select_query = "INSERT INTO favourites_books (user_id, book_id) VALUES ($user_id, $book_id);";
     mysqli_query($con, $select_query);
 
 }
+
+function get_books_by_filters($author_name = '', $author_surname = '', $title = '', $genre = ''){
+    $con = get_connection();
+    $arr = array();
+    $sql = "SELECT DISTINCT books.id, books.title, books.date, books.pages_count, books.free_count 
+            FROM books, books_genres, genre, books_authors, authors WHERE
+                                                                             books_genres.book_id = books.id
+                                                                             AND books_genres.genre_id = genre.id
+                                                                             AND books_authors.author_id = authors.id
+                                                                             AND books_authors.book_id = books.id";
+    if (!empty($author_name)) {
+        $sql .= " AND authors.name LIKE '%".$author_name."%'";
+    }
+    if (!empty($author_surname)) {
+        $sql .= " AND authors.surname LIKE '%".$author_surname."%'";
+    }
+    if (!empty($title)) {
+        $sql .= " AND books.title LIKE '%".$title."%'";
+    }
+    if (!empty($genre)) {
+        $sql .= " AND genre.title LIKE '%".$genre."%'";
+    }
+
+// Выполнение запроса и вывод результатов
+
+    $result = mysqli_query($con, $sql);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $arr[] = $row;
+    }
+    mysqli_close($con);
+    return $arr;
+}
+
 
 ?>

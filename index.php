@@ -61,46 +61,76 @@ echo generate_header();
         <div class="col-md-9">
             Примененные фильтры: <?php
                 $filters = '';
-                if (isset($_GET["genres"])){
-                    $num = count($_GET["genres"]);
-                    for ($i = 0; $i < $num; $i++){
-                        $filters .= ' '.$_GET["genres"][$i];
+                if (isset($_GET["genre"])){
+                    if (!empty($_GET["genre"])){
+                        $filters .= $_GET["genre"] . ' ';
                     }
                 }
-                if (isset($_GET["authors"]) && $_GET["authors"][0] != 'Выберите значение'){
-                    $filters .= ' '.$_GET["authors"][0];
+                if (isset($_GET["author_name"])){
+                    if (!empty($_GET["author_name"])){
+                        $filters .= $_GET["author_name"] . ' ';
+                    }
+                }
+                if (isset($_GET["author_surname"])){
+                    if (!empty($_GET["author_surname"])){
+                        $filters .= $_GET["author_surname"] . ' ';
+                    }
+                }
+                if (isset($_GET["title"])){
+                    if (!empty($_GET["title"])){
+                        $filters .= $_GET["title"] . ' ';
+                    }
                 }
                 echo $filters;
             ?>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <?php
-                $books = null;
-                if (isset($_GET["authors"]) && isset($_GET["genres"])){
-                    $books = get_books_by_genres_and_author($_GET["genres"], $_GET["authors"]);
-                } elseif (isset($_GET["authors"])){
-                    $books = get_books_by_genres_and_author(null, $_GET["authors"]);
-                } elseif (isset($_GET["genres"])){
-                    $books = get_books_by_genres_and_author($_GET["genres"], null);
-                } else{
-                    $books = get_books();
+                $books = [];
+                $genre = '';
+                $author_name = '';
+                $author_surname = '';
+                $title = '';
+                $BOOKS_ON_ONE_PAGE = 9;
+                if (isset($_GET["genre"])){
+                    if (!empty($_GET["genre"])){
+                        $genre = $_GET["genre"];
+                    }
                 }
+                if (isset($_GET["author_name"])){
+                    if (!empty($_GET["author_name"])){
+                        $author_name = $_GET["author_name"];
+                    }
+                }
+                if (isset($_GET["author_surname"])){
+                    if (!empty($_GET["author_surname"])){
+                        $author_surname = $_GET["author_surname"];
+                    }
+                }
+                if (isset($_GET["title"])){
+                    if (!empty($_GET["title"])){
+                        $title = $_GET["title"];
+                    }
+                }
+                $books = get_books_by_filters($author_name, $author_surname, $title, $genre);
                 $_SESSION['index_total_books'] = count($books);
-                $books = array_slice($books, ($_SESSION['index_current_page']-1) * 9, 9);
+                $books = array_slice($books, ($_SESSION['index_current_page']-1) * $BOOKS_ON_ONE_PAGE, $BOOKS_ON_ONE_PAGE);
                 $num = count($books);
                 $res = '';
-                if (isset($books)){
-                    for ($i = 0; $i < $num; $i++) {
-                        $authors = get_authors_by_book_id($books[$i]['id']);
-                        $num2 = count($authors);
+                if (!empty($books)){
+                    foreach ($books as $book) {
+                        // Получаем авторов книги по ее id
+                        $authors = get_authors_by_book_id($book['id']);
+
+                        // Формируем строку со списком авторов
                         $authors_res = 'Авторы: ';
-                        for ($j = 0; $j < $num2; $j++) {
-                            if ($j == $num2 -1){
-                                $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"];
-                            } else{
-                                $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"].', ';
-                            }
+                        foreach ($authors as $author) {
+                            $authors_res .= $author['name'] . ' ' . $author['surname'] . ', ';
                         }
-                        $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['id']);
+                        // Удаляем последнюю запятую и пробел из строки со списком авторов
+                        $authors_res = rtrim($authors_res, ', ');
+
+                        // Генерируем HTML-код для книги и добавляем его к результирующей строке
+                        $res .= generate_book($book['title'], $authors_res, $book['id']);
                     }
                 }
                 echo $res;
@@ -112,6 +142,7 @@ echo generate_header();
         </div>
     </div>
     <!--CONTENT FINISH-->
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
