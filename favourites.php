@@ -32,17 +32,22 @@ echo generate_header();
     <h1>Избранное</h1>
     <div class="card-deck">
         <?php
-        $books = get_favourites_books_by_user_id($_SESSION["user"]["id"]);
-        $num = count($books);
-        $res = '';
-        if (isset($books) and $num > 0){
-            for ($i = 0; $i < $num; $i++){
-                $res .= generate_book($books[$i]['id'], $books[$i]['title'], $books[$i]['date'], $books[$i]['pages_count'], $books[$i]['free_count']);
+        try {
+            $books = get_favourites_books_by_user_id($_SESSION["user"]["id"]);
+            $num = count($books);
+            $res = '';
+            if (isset($books) and $num > 0){
+                for ($i = 0; $i < $num; $i++){
+                    $res .= generate_book($books[$i]['id'], $books[$i]['title'], $books[$i]['date'], $books[$i]['pages_count'], $books[$i]['free_count']);
+                }
+            } else {
+                $res = 'Список пуст!';
             }
-        } else {
-            $res = 'Список пуст!';
+            echo $res;
+        } catch (Exception $e){
+            echo "<div>Непредвиденная ошибка!</div>";
         }
-        echo $res;
+
         ?>
     </div>
 </div>

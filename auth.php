@@ -47,18 +47,24 @@ echo generate_header();
                 <div>Нет аккаунта? <a href="./registr.php">Зарегистрируйтесь!</a></div>
                 <?php
                 if (isset($_POST["auth_email"]) && isset($_POST["auth_password"])) {
+
                     if (!empty($_POST['auth_email']) && !empty($_POST["auth_password"])) {
-                        $user = get_user_by_login($_POST["auth_email"]);
-                        if (!empty($user)) {
-                            if ($_POST["auth_password"] == $user["password"]) {
-                                $_SESSION["user"] = $user;
-                                header('Location: ' . '/library/index.php');
+                        try {
+                            $user = get_user_by_login($_POST["auth_email"]);
+                            if (!empty($user)) {
+                                if ($_POST["auth_password"] == $user["password"]) {
+                                    $_SESSION["user"] = $user;
+                                    header('Location: ' . '/library/index.php');
+                                } else {
+                                    $_SESSION['auth_incorrect_data'] = true;
+                                }
                             } else {
                                 $_SESSION['auth_incorrect_data'] = true;
                             }
-                        } else {
+                        } catch (Exception $e){
                             $_SESSION['auth_incorrect_data'] = true;
                         }
+
                     } else {
                         $_SESSION['auth_incorrect_data'] = true;
                     }

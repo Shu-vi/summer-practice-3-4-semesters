@@ -33,7 +33,7 @@ function generate_header()
         return "
             <nav class=\"navbar navbar-dark bg-dark fixed-top\">
         <div class=\"container-fluid\">
-            <a class=\"navbar-brand\" style=\"text-transform: uppercase\" href=\"./index.php\">Библиотека</a>
+            <a class=\"navbar-brand\" style=\"text-transform: uppercase\" href=\"/library/index.php\">Библиотека</a>
             <div class=\"d-flex align-items-center\">
                 <div class=\"text-white\" style='margin-right: 10px;'>id: $id</div>
                 <div class=\"text-white\" style='margin-right: 10px;'>$username</div>
@@ -62,7 +62,7 @@ function generate_header()
                             <a class=\"nav-link $my_books\" href=\"/library/my_books.php\">Читаю сейчас</a>
                         </li
                         <li class=\"nav-item\">
-                            <a class=\"nav-link $admin\" href=\"/library/admin.php\">Админка</a>
+                            <a class=\"nav-link $admin\" href=\"/library/admin/give_book.php\">Админка</a>
                         </li
                         <li class=\"nav-item\">
                             <a class=\"nav-link\" href=\"/library/handlers/exit_handler.php\">Выйти</a>
@@ -80,7 +80,7 @@ function generate_header()
         return "
             <nav class=\"navbar navbar-dark bg-dark fixed-top\">
         <div class=\"container-fluid\">
-            <a class=\"navbar-brand\" style=\"text-transform: uppercase\" href=\"./index.php\">Библиотека</a>
+            <a class=\"navbar-brand\" style=\"text-transform: uppercase\" href=\"/library/index.php\">Библиотека</a>
             <div class=\"d-flex align-items-center\">
                 <div class=\"text-white\" style='margin-right: 10px;'>id: $id</div>
                 <div class=\"text-white\" style='margin-right: 10px;'>$username</div>
@@ -122,7 +122,7 @@ function generate_header()
     return "
     <nav class=\"navbar navbar-dark bg-dark fixed-top\">
         <div class=\"container-fluid\">
-            <a class=\"navbar-brand\" style=\"text-transform: uppercase\" href=\"./index.php\">Библиотека</a>
+            <a class=\"navbar-brand\" style=\"text-transform: uppercase\" href=\"/library/index.php\">Библиотека</a>
             <div class=\"d-flex align-items-center\">
                 <div class=\"text-white\"></div>
                 <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"offcanvas\" data-bs-target=\"#offcanvasDarkNavbar\" aria-controls=\"offcanvasDarkNavbar\">

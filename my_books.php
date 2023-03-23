@@ -19,7 +19,7 @@ set_page("my_books");
 </head>
 <body>
 <?php
-if (!isset($_SESSION["user"])){
+if (!isset($_SESSION["user"])) {
     echo get_need_auth_block();
     exit();
 }
@@ -31,27 +31,33 @@ echo generate_header();
     <h1>Мои книги</h1>
     <div class="card-deck">
         <?php
-            $books = get_readable_books_by_user_id($_SESSION['user']['id']);
-            $num = count($books);
-            $res = '';
-            if (isset($books) and $num > 0){
-                for ($i = 0; $i < $num; $i++){
-                    $authors = get_authors_by_book_id($books[$i]['id']);
-                    $num2 = count($authors);
-                    $authors_res = 'Авторы: ';
-                    for ($j = 0; $j < $num2; $j++) {
-                        if ($j == $num2 -1){
-                            $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"];
-                        } else{
-                            $authors_res .= $authors[$j]["name"]." ".$authors[$j]["surname"].', ';
+            try {
+                $books = get_readable_books_by_user_id($_SESSION['user']['id']);
+                $num = count($books);
+                $res = '';
+                if (isset($books) and $num > 0) {
+                    for ($i = 0; $i < $num; $i++) {
+                        $authors = get_authors_by_book_id($books[$i]['id']);
+                        $num2 = count($authors);
+                        $authors_res = 'Авторы: ';
+                        for ($j = 0; $j < $num2; $j++) {
+                            if ($j == $num2 - 1) {
+                                $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"];
+                            } else {
+                                $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"] . ', ';
+                            }
                         }
+                        $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['date'], $books[$i]['deadline']);
                     }
-                    $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['date'], $books[$i]['deadline']);
+                } else {
+                    $res = 'Список пуст!';
                 }
-            } else {
-                $res = 'Список пуст!';
+                echo $res;
+            } catch (Exception $e){
+                echo "Непредвиденная ошибка!";
             }
-            echo $res;
+
+
         ?>
     </div>
 </div>

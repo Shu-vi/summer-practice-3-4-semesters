@@ -5,9 +5,6 @@ include('utils.php');
 include('database/database.php');
 session_start();
 set_page("registr");
-if (isset($_POST["name"]) && isset($_POST["email"]) && isset($_POST["password"])) {
-    add_user($_POST["name"], $_POST["email"], $_POST["password"]);
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,12 +25,34 @@ if (isset($_SESSION["user"])){
 <?php
 echo generate_header();
 ?>
+<?php
+$name = '';
+$email = '';
+$password = '';
+if (!empty($_POST["name"])){
+    $name = $_POST["name"];
+}
+if (!empty($_POST["email"])){
+    $email = $_POST["email"];
+}
+if (!empty($_POST["password"])){
+    $password = $_POST["password"];
+}
 
+if (!empty($name) && !empty($email) && !empty($password)){
+    try {
+        add_user($name, $email, $password);
+    } catch (Exception $e){
+        echo "Непредвиденная ошибка!";
+    }
+}
+
+?>
 <!--Блок регистрации старт-->
 <div class="card bg-dark text-white pt-5 pb-5 min-vh-100" style="padding: 0 200px 0 200px;">
     <div class="card-body mt-5">
         <h5 class="card-title">Регистрация</h5>
-        <form method="post" action="registr.php">
+        <form method="post" action="">
             <div class="mb-3">
                 <label for="name" class="form-label">Имя</label>
                 <input type="text" class="form-control" id="name" name="name">

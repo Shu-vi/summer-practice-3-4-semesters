@@ -50,39 +50,42 @@ echo generate_header();
         </form>
         <div class="row row-cols-1 row-cols-md-3 g-4 text-black">
             <?php
-            $books = null;
-            if (isset($_GET["genres"])) {
-                $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], $_GET["genres"]);
-            } elseif (isset($_GET["authors"])) {
-                $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], []);
-            } else {
-                $books = get_unique_books($_SESSION['user']['id'], [], []);
-            }
-            $num = count($books);
-            shuffle($books);
-            if ($num > 5) {
-                $num = 5;
-            }
-            $res = '';
-            for ($i = 0; $i < $num; $i++) {
-                $authors = get_authors_by_book_id($books[$i]['id']);
-                $num2 = count($authors);
-                $authors_res = 'Авторы: ';
-                for ($j = 0; $j < $num2; $j++) {
-                    if ($j == $num2 - 1) {
-                        $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"];
-                    } else {
-                        $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"] . ', ';
-                    }
+            try {
+                $books = null;
+                if (isset($_GET["genres"])) {
+                    $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], $_GET["genres"]);
+                } elseif (isset($_GET["authors"])) {
+                    $books = get_unique_books($_SESSION['user']['id'], $_GET["authors"], []);
+                } else {
+                    $books = get_unique_books($_SESSION['user']['id'], [], []);
                 }
-                $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['id']);
+                $num = count($books);
+                shuffle($books);
+                if ($num > 5) {
+                    $num = 5;
+                }
+                $res = '';
+                for ($i = 0; $i < $num; $i++) {
+                    $authors = get_authors_by_book_id($books[$i]['id']);
+                    $num2 = count($authors);
+                    $authors_res = 'Авторы: ';
+                    for ($j = 0; $j < $num2; $j++) {
+                        if ($j == $num2 - 1) {
+                            $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"];
+                        } else {
+                            $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"] . ', ';
+                        }
+                    }
+                    $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['id']);
+                }
+                if (!empty($res)) {
+                    echo $res;
+                } else {
+                    echo "<div class='text-white'>По вашему запросу ничего не найдено. Попробуйте выбрать другие критерии для поиска или вовсе не выбирать их.</div>";
+                }
+            } catch (Exception $e){
+                echo "<div class='text-white'>Непредвиденная ошибка!</div>";
             }
-            if (!empty($res)) {
-                echo $res;
-            } else {
-                echo "<div class='text-white'>По вашему запросу ничего не найдено. Попробуйте выбрать другие критерии для поиска или вовсе не выбирать их.</div>";
-            }
-
             ?>
         </div>
     </div>
