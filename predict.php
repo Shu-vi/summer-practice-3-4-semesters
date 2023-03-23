@@ -76,7 +76,13 @@ echo generate_header();
                             $authors_res .= $authors[$j]["name"] . " " . $authors[$j]["surname"] . ', ';
                         }
                     }
-                    $res .= generate_book($books[$i]['title'], $authors_res, $books[$i]['id']);
+                    $genres = get_genres_by_book_id($books[$i]['id']);
+                    $genres_res = 'Жанры: ';
+                    foreach ($genres as $k){
+                        $genres_res .= $k['title'].', ';
+                    }
+                    $genres_res = rtrim($genres_res, ', ');
+                    $res .= generate_book($books[$i], $authors_res, $genres_res);
                 }
                 if (!empty($res)) {
                     echo $res;

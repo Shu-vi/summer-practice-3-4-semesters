@@ -136,7 +136,7 @@ function get_unique_books($user_id, $authors, $genres)
             $genres_text .= '"' . $genres[$i] . "\", ";
         }
     }
-    $select_query = "SELECT min(books.id) as id, books.title as title 
+    $select_query = "SELECT min(books.id) as id, books.title as title, books.free_count as free_count, books.date as date
 FROM books, books_genres, books_authors, authors, genre
 where NOT EXISTS (
   SELECT 1
@@ -158,7 +158,7 @@ and books_authors.author_id = authors.id";
     if (!empty($author)) {
         $select_query .= " and \"$author\" = authors.id";
     }
-    $select_query .= " group by title;";
+    $select_query .= " group by title, free_count, date;";
     $result_query = mysqli_query($con, $select_query);
     while ($row = mysqli_fetch_assoc($result_query)) {
         $arr[] = $row;

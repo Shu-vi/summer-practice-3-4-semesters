@@ -7,6 +7,7 @@ include('components/checkbox.php');
 include('utils.php');
 include('database/database.php');
 session_start();
+$_SESSION['BOOKS_ON_ONE_PAGE'] = 4;
 if (!isset($_SESSION['index_current_page'])) {
     $_SESSION['index_current_page'] = 1;
 } elseif (isset($_GET["page"])) {
@@ -93,21 +94,24 @@ echo generate_header();
                 $author_name = '';
                 $author_surname = '';
                 $title = '';
-                $_SESSION['BOOKS_ON_ONE_PAGE'] = 4;
                 if (!empty($_GET["genre"])) {
                     $genre = $_GET["genre"];
+                    $_SESSION['index_current_page'] = 1;
                 }
 
                 if (!empty($_GET["author_name"])) {
                     $author_name = $_GET["author_name"];
+                    $_SESSION['index_current_page'] = 1;
                 }
 
                 if (!empty($_GET["author_surname"])) {
                     $author_surname = $_GET["author_surname"];
+                    $_SESSION['index_current_page'] = 1;
                 }
 
                 if (!empty($_GET["title"])) {
                     $title = $_GET["title"];
+                    $_SESSION['index_current_page'] = 1;
                 }
                 try {
                     $books = get_books_by_filters($author_name, $author_surname, $title, $genre);
