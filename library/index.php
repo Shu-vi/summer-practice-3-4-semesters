@@ -113,7 +113,7 @@ echo generate_header();
                     $title = $_GET["title"];
                     $_SESSION['index_current_page'] = 1;
                 }
-                try {
+                //try {
                     $books = get_books_by_filters($author_name, $author_surname, $title, $genre);
                     $_SESSION['index_total_books'] = count($books);
                     $books = array_slice($books, ($_SESSION['index_current_page'] - 1) * $_SESSION['BOOKS_ON_ONE_PAGE'], $_SESSION['BOOKS_ON_ONE_PAGE']);
@@ -146,9 +146,9 @@ echo generate_header();
                     } else {
                         echo "<div>Ничего не найдено!</div>";
                     }
-                } catch (Exception $e){
-                    echo "<div>Непредвиденная ошибка!</div>";
-                }
+                //} catch (Exception $e){
+                //    echo "<div>Непредвиденная ошибка!</div>";
+                //}
                 ?>
             </div>
             <?php

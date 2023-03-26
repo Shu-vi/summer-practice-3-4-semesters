@@ -44,7 +44,7 @@ echo generate_header();
             </div>
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-primary">Войти</button>
-                <div>Нет аккаунта? <a href="./registr.php">Зарегистрируйтесь!</a></div>
+                <div>Нет аккаунта? <a href="registr.php">Зарегистрируйтесь!</a></div>
                 <?php
                 if (isset($_POST["auth_email"]) && isset($_POST["auth_password"])) {
 
@@ -54,7 +54,7 @@ echo generate_header();
                             if (!empty($user)) {
                                 if ($_POST["auth_password"] == $user["password"]) {
                                     $_SESSION["user"] = $user;
-                                    header('Location: ' . '/library/index.php');
+                                    header('Location: ' . './library/index.php');
                                 } else {
                                     $_SESSION['auth_incorrect_data'] = true;
                                 }

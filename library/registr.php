@@ -67,7 +67,7 @@ if (!empty($name) && !empty($email) && !empty($password)){
             </div>
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-                <div>Уже есть аккаунт? <a href="./auth.php">Войдите!</a></div>
+                <div>Уже есть аккаунт? <a href="auth.php">Войдите!</a></div>
             </div>
         </form>
     </div>
