@@ -54,7 +54,8 @@ echo generate_header();
                             if (!empty($user)) {
                                 if ($_POST["auth_password"] == $user["password"]) {
                                     $_SESSION["user"] = $user;
-                                    header('Location: ' . './library/index.php');
+                                    //header('Location: /library/index.php');
+                                    echo "<script>window.location.replace('/library/index.php')</script>";
                                 } else {
                                     $_SESSION['auth_incorrect_data'] = true;
                                 }
