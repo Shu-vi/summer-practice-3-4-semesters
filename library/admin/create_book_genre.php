@@ -86,7 +86,7 @@ echo generate_header();
             <label for="book_genre" class="form-label">Название жанра(например: "Фантастика")</label>
             <input type="text" class="form-control" id="book_genre" name="book_genre">
         </div>
-        <button type="submit" class="btn btn-secondary">Принять</button>
+        <button type="submit" class="btn btn-secondary">Добавить</button>
     </form>
 </div>
 

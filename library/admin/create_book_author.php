@@ -89,7 +89,7 @@ echo generate_header();
             <label for="book_author_surname" class="form-label">Фамилия автора</label>
             <input type="text" class="form-control" id="book_author_surname" name="book_author_surname">
         </div>
-        <button type="submit" class="btn btn-secondary">Создать</button>
+        <button type="submit" class="btn btn-secondary">Добавить</button>
     </form>
 </div>
 

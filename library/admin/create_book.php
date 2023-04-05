@@ -94,7 +94,7 @@ echo generate_header();
             <label for="book_page_count" class="form-label">Количество страниц</label>
             <input type="text" class="form-control" id="book_page_count" name="book_page_count">
         </div>
-        <button type="submit" class="btn btn-secondary">Принять</button>
+        <button type="submit" class="btn btn-secondary">Добавить</button>
     </form>
 </div>
 
