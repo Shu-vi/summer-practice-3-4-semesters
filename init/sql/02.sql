@@ -28,6 +28,13 @@ BEGIN
     RETURN CHAR_LENGTH(password) >= 6;
 END//
 
+CREATE FUNCTION IF NOT EXISTS check_login_length(login VARCHAR(35))
+    RETURNS BOOLEAN
+    DETERMINISTIC
+BEGIN
+    RETURN CHAR_LENGTH(login) >= 5;
+END//
+
 CREATE TRIGGER IF NOT EXISTS users_check_password_length_insert
 BEFORE INSERT ON users
 FOR EACH ROW
